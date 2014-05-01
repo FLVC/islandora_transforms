@@ -166,6 +166,81 @@
         </xsl:when>
     </xsl:choose>
 
+    <xsl:for-each select="$modscontent/mods:titleInfo/mods:title[normalize-space(text())]">
+        <field name="mods_titleInfo_display_ms">
+        <xsl:if test="../mods:nonSort[normalize-space(text())]">
+            <xsl:value-of select="normalize-space(../mods:nonSort/text())"/>
+            <xsl:text> </xsl:text>
+        </xsl:if>
+        <xsl:value-of select="normalize-space(../mods:title/text())"/>
+        <xsl:if test="../mods:subTitle[normalize-space(text())]">
+            <xsl:text>: </xsl:text>
+            <xsl:value-of select="normalize-space(../mods:subTitle/text())"/>
+        </xsl:if>
+        <xsl:text>.</xsl:text>
+        <xsl:for-each select="../mods:partNumber[normalize-space(text())]">
+            <xsl:text> </xsl:text>
+            <xsl:value-of select="normalize-space(text())"/>
+            <xsl:text>.</xsl:text>
+        </xsl:for-each>
+        <xsl:for-each select="../mods:partName[normalize-space(text())]">
+            <xsl:text> </xsl:text>
+            <xsl:value-of select="normalize-space(text())"/>
+            <xsl:text>.</xsl:text>
+        </xsl:for-each>
+        </field>
+    </xsl:for-each>
+
+    <xsl:for-each select="$modscontent/mods:subject/mods:titleInfo/mods:title[normalize-space(text())]">
+        <field name="mods_subject_titleInfo_display_ms">
+        <xsl:if test="../mods:nonSort[normalize-space(text())]">
+            <xsl:value-of select="normalize-space(../mods:nonSort/text())"/>
+            <xsl:text> </xsl:text>
+        </xsl:if>
+        <xsl:value-of select="normalize-space(../mods:title/text())"/>
+        <xsl:if test="../mods:subTitle[normalize-space(text())]">
+            <xsl:text>: </xsl:text>
+            <xsl:value-of select="normalize-space(../mods:subTitle/text())"/>
+        </xsl:if>
+        <xsl:text>.</xsl:text>
+        <xsl:for-each select="../mods:partNumber[normalize-space(text())]">
+            <xsl:text> </xsl:text>
+            <xsl:value-of select="normalize-space(text())"/>
+            <xsl:text>.</xsl:text>
+        </xsl:for-each>
+        <xsl:for-each select="../mods:partName[normalize-space(text())]">
+            <xsl:text> </xsl:text>
+            <xsl:value-of select="normalize-space(text())"/>
+            <xsl:text>.</xsl:text>
+        </xsl:for-each>
+        </field>
+    </xsl:for-each>
+
+    <xsl:for-each select="$modscontent/mods:relatedItem/mods:titleInfo/mods:title[normalize-space(text())]">
+        <field name="mods_relatedItem_titleInfo_display_ms">
+        <xsl:if test="../mods:nonSort[normalize-space(text())]">
+            <xsl:value-of select="normalize-space(../mods:nonSort/text())"/>
+            <xsl:text> </xsl:text>
+        </xsl:if>
+        <xsl:value-of select="normalize-space(../mods:title/text())"/>
+        <xsl:if test="../mods:subTitle[normalize-space(text())]">
+            <xsl:text>: </xsl:text>
+            <xsl:value-of select="normalize-space(../mods:subTitle/text())"/>
+        </xsl:if>
+        <xsl:text>.</xsl:text>
+        <xsl:for-each select="../mods:partNumber[normalize-space(text())]">
+            <xsl:text> </xsl:text>
+            <xsl:value-of select="normalize-space(text())"/>
+            <xsl:text>.</xsl:text>
+        </xsl:for-each>
+        <xsl:for-each select="../mods:partName[normalize-space(text())]">
+            <xsl:text> </xsl:text>
+            <xsl:value-of select="normalize-space(text())"/>
+            <xsl:text>.</xsl:text>
+        </xsl:for-each>
+        </field>
+    </xsl:for-each>
+
     <!-- additional processing to include type in field name -->
     <!-- DOI, ISSN, ISBN, and any other typed IDs -->
     <xsl:for-each select="$modscontent/mods:identifier[@type][normalize-space(text())]">
