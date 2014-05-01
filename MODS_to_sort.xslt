@@ -119,7 +119,14 @@
                     <xsl:value-of select="normalize-space(../mods:nonSort/text())"/>
                     <xsl:text> </xsl:text>
                 </xsl:if>
-                <xsl:value-of select="normalize-space(../mods:title/text())"/>
+                <xsl:choose>
+                    <xsl:when test="substring(../mods:title/text(), string-length(../mods:title/text()), 1) = '.'">
+                        <xsl:value-of select="normalize-space(substring(../mods:title/text(),1,string-length(../mods:title/text())-1))"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:value-of select="normalize-space(../mods:title/text())"/>
+                    </xsl:otherwise>
+                </xsl:choose>
                 <xsl:if test="../mods:subTitle[normalize-space(text())]">
                     <xsl:text>: </xsl:text>
                     <xsl:value-of select="normalize-space(../mods:subTitle/text())"/>
@@ -145,7 +152,14 @@
                     <xsl:value-of select="normalize-space(../mods:nonSort/text())"/>
                     <xsl:text> </xsl:text>
                 </xsl:if>
-                <xsl:value-of select="normalize-space(../mods:title/text())"/>
+                <xsl:choose>
+                    <xsl:when test="substring(../mods:title/text(), string-length(../mods:title/text()), 1) = '.'">
+                        <xsl:value-of select="normalize-space(substring(../mods:title/text(),1,string-length(../mods:title/text())-1))"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:value-of select="normalize-space(../mods:title/text())"/>
+                    </xsl:otherwise>
+                </xsl:choose>
                 <xsl:if test="../mods:subTitle[normalize-space(text())]">
                     <xsl:text>: </xsl:text>
                     <xsl:value-of select="normalize-space(../mods:subTitle/text())"/>
@@ -172,7 +186,14 @@
             <xsl:value-of select="normalize-space(../mods:nonSort/text())"/>
             <xsl:text> </xsl:text>
         </xsl:if>
-        <xsl:value-of select="normalize-space(../mods:title/text())"/>
+        <xsl:choose>
+            <xsl:when test="substring(../mods:title/text(), string-length(../mods:title/text()), 1) = '.'">
+                <xsl:value-of select="normalize-space(substring(../mods:title/text(),1,string-length(../mods:title/text())-1))"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:value-of select="normalize-space(../mods:title/text())"/>
+            </xsl:otherwise>
+        </xsl:choose>
         <xsl:if test="../mods:subTitle[normalize-space(text())]">
             <xsl:text>: </xsl:text>
             <xsl:value-of select="normalize-space(../mods:subTitle/text())"/>
@@ -197,7 +218,14 @@
             <xsl:value-of select="normalize-space(../mods:nonSort/text())"/>
             <xsl:text> </xsl:text>
         </xsl:if>
-        <xsl:value-of select="normalize-space(../mods:title/text())"/>
+        <xsl:choose>
+            <xsl:when test="substring(../mods:title/text(), string-length(../mods:title/text()), 1) = '.'">
+                <xsl:value-of select="normalize-space(substring(../mods:title/text(),1,string-length(../mods:title/text())-1))"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:value-of select="normalize-space(../mods:title/text())"/>
+            </xsl:otherwise>
+        </xsl:choose>
         <xsl:if test="../mods:subTitle[normalize-space(text())]">
             <xsl:text>: </xsl:text>
             <xsl:value-of select="normalize-space(../mods:subTitle/text())"/>
@@ -222,7 +250,14 @@
             <xsl:value-of select="normalize-space(../mods:nonSort/text())"/>
             <xsl:text> </xsl:text>
         </xsl:if>
-        <xsl:value-of select="normalize-space(../mods:title/text())"/>
+        <xsl:choose>
+            <xsl:when test="substring(../mods:title/text(), string-length(../mods:title/text()), 1) = '.'">
+                <xsl:value-of select="normalize-space(substring(../mods:title/text(),1,string-length(../mods:title/text())-1))"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:value-of select="normalize-space(../mods:title/text())"/>
+            </xsl:otherwise>
+        </xsl:choose>
         <xsl:if test="../mods:subTitle[normalize-space(text())]">
             <xsl:text>: </xsl:text>
             <xsl:value-of select="normalize-space(../mods:subTitle/text())"/>
