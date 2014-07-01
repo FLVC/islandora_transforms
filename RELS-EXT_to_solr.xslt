@@ -123,6 +123,12 @@
                         </field>
                     </xsl:if>
 
+                    <xsl:if test="$content//rdf:Description/fedora-model:hasModel[@rdf:resource='info:fedora/islandora:intermediateSerialCModelStub']">
+                        <field name="parent_serial_id_ms">
+                        <xsl:value-of select="@uri"/>
+                        </field>
+                    </xsl:if>
+
                     <xsl:variable name="query3">select+$object+from+%3C%23ri%3E+where+$subject+%3Cfedora-model:hasModel%3E+%3Cinfo:fedora/islandora:collectionCModel%3E+and+walk%28%3C<xsl:value-of select="@uri"/>%3E+%3Cfedora-rels-ext:isMemberOfCollection%3E+$object+and+$subject+%3Cfedora-rels-ext:isMemberOfCollection%3E+$object%29</xsl:variable>
                     <xsl:variable name="sparqlUrl3">http://localhost:8080/fedora/risearch?type=tuples&amp;lang=itql&amp;limit=1000&amp;format=Sparql&amp;query=<xsl:value-of select="$query3"/></xsl:variable>
                     <xsl:variable name="sparql3" select="document($sparqlUrl3)"/>
