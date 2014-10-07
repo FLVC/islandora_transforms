@@ -54,10 +54,17 @@
           <xsl:with-param name="node" select="."/>
         </xsl:call-template>
       </xsl:variable>
-      
+     
       <field>
         <xsl:attribute name="name">
-        <xsl:value-of select="concat($prefix, $fieldName, $suffix)"/>
+        <xsl:choose>
+          <xsl:when test="@type='date'">
+            <xsl:value-of select="concat($prefix, $fieldName, '_mt')"/>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:value-of select="concat($prefix, $fieldName, $suffix)"/>
+          </xsl:otherwise>
+        </xsl:choose>
         </xsl:attribute>
         <xsl:value-of select="text()"/>
       </field>
