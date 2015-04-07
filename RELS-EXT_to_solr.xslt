@@ -84,6 +84,11 @@
                     <xsl:value-of select="@uri"/>
                     </field>
                   </xsl:if>
+                  <xsl:if test="$content//rdf:Description/fedora-model:hasModel[@rdf:resource='info:fedora/islandora:intermediateCModel']">
+                      <field name="parent_serial_id_ms">
+                      <xsl:value-of select="$content//rdf:Description/fedora:isMemberOf/@rdf:resource"/>
+                      </field>
+                  </xsl:if>
                 </xsl:for-each>
             </xsl:for-each>
 
@@ -113,6 +118,12 @@
 
                     <xsl:if test="$content//rdf:Description/fedora-model:hasModel[@rdf:resource='info:fedora/islandora:newspaperPageCModel']">
                         <field name="parent_newspaper_id_ms">
+                        <xsl:value-of select="@uri"/>
+                        </field>
+                    </xsl:if>
+
+                    <xsl:if test="$content//rdf:Description/fedora-model:hasModel[@rdf:resource='info:fedora/islandora:intermediateCModel']">
+                        <field name="parent_serial_id_ms">
                         <xsl:value-of select="@uri"/>
                         </field>
                     </xsl:if>
