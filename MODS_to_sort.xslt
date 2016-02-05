@@ -281,6 +281,44 @@
         </field>
     </xsl:for-each>
 
+    <xsl:for-each select="$modscontent/mods:name">
+        <xsl:if test="mods:namePart[not(@type)][normalize-space(text())]">
+            <field name="mods_name_namePart_display_ms">
+            <xsl:value-of select="normalize-space(mods:namePart[not(@type)]/text())"/>
+            </field>
+        </xsl:if>
+        <xsl:if test="mods:namePart[@type='family' or @type='given'][normalize-space(text())]">
+            <field name="mods_name_namePart_display_ms">
+            <xsl:if test="mods:namePart[@type='family'][normalize-space(text())]">
+                <xsl:value-of select="normalize-space(mods:namePart[@type='family']/text())"/>
+            </xsl:if>
+            <xsl:if test="mods:namePart[@type='given'][normalize-space(text())]">
+                <xsl:text>, </xsl:text>
+                <xsl:value-of select="normalize-space(mods:namePart[@type='given']/text())"/>
+            </xsl:if>
+            </field>
+        </xsl:if>
+    </xsl:for-each>
+
+    <xsl:for-each select="$modscontent/mods:subject/mods:name">
+        <xsl:if test="mods:namePart[not(@type)][normalize-space(text())]">
+            <field name="mods_subject_name_namePart_display_ms">
+            <xsl:value-of select="normalize-space(mods:namePart[not(@type)]/text())"/>
+            </field>
+        </xsl:if>
+        <xsl:if test="mods:namePart[@type='family' or @type='given'][normalize-space(text())]">
+            <field name="mods_subject_name_namePart_display_ms">
+            <xsl:if test="mods:namePart[@type='family'][normalize-space(text())]">
+                <xsl:value-of select="normalize-space(mods:namePart[@type='family']/text())"/>
+            </xsl:if>
+            <xsl:if test="mods:namePart[@type='given'][normalize-space(text())]">
+                <xsl:text>, </xsl:text>
+                <xsl:value-of select="normalize-space(mods:namePart[@type='given']/text())"/>
+            </xsl:if>
+            </field>
+        </xsl:if>
+    </xsl:for-each>
+
     <!-- additional processing to include type in field name -->
     <!-- DOI, ISSN, ISBN, and any other typed IDs -->
     <xsl:for-each select="$modscontent/mods:identifier[@type][normalize-space(text())]">
