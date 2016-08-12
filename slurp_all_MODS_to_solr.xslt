@@ -38,6 +38,19 @@
         </xsl:attribute>
         <xsl:value-of select="normalize-space(text())"/>
       </field>
+
+      <xsl:variable name="fieldNameWithTypes">
+        <xsl:call-template name="get_all_parents_with_types">
+          <xsl:with-param name="node" select="."/>
+        </xsl:call-template>
+      </xsl:variable>
+      <field>
+        <xsl:attribute name="name">
+          <xsl:value-of select="concat($prefix, $fieldNameWithTypes, $suffix)"/>
+        </xsl:attribute>
+        <xsl:value-of select="normalize-space(text())"/>
+      </field>
+
     </xsl:for-each>
     
     <!-- Handle dates. -->
@@ -94,6 +107,22 @@
       <xsl:value-of select="concat('_', local-name($node))"/>
     </xsl:if>
       
+  </xsl:template>
+
+  <xsl:template name="get_all_parents_with_types">
+    <xsl:param name="node"/>
+
+    <xsl:if test="not(local-name($node)='mods')">
+      <xsl:call-template name="get_all_parents_with_types">
+        <xsl:with-param name="node" select="$node/.."/>
+      </xsl:call-template>
+      <xsl:value-of select="concat('_', local-name($node))"/>
+      <xsl:if test="$node/@type">
+        <xsl:text>_</xsl:text>
+        <xsl:value-of select="translate($node/@type,' ','_')"/>
+      </xsl:if>
+    </xsl:if>
+
   </xsl:template>
   
 </xsl:stylesheet>
