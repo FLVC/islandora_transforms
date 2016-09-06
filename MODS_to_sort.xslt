@@ -5,6 +5,8 @@
   xmlns:xlink="http://www.w3.org/1999/xlink"
   xmlns:foxml="info:fedora/fedora-system:def/foxml#"
   xmlns:mods="http://www.loc.gov/mods/v3"
+  xmlns:result="http://www.w3.org/2001/sw/DataAccess/rf1/result"
+  xmlns:encoder="xalan://java.net.URLEncoder"
      exclude-result-prefixes="mods">
 
   <xsl:template match="foxml:datastream[@ID='MODS']/foxml:datastreamVersion[last()]" name="index_MODS_sort" mode="sort">
@@ -318,6 +320,22 @@
             </field>
         </xsl:if>
     </xsl:for-each>
+
+    <xsl:variable name="PID_namespace" select="substring-before($PID, ':')"/>
+
+    <!-- if nameIdentifier exists in mods, index all parent organizations -->
+    <xsl:if test="$modscontent/mods:name/mods:nameIdentifier">
+      <xsl:variable name="orgURL">http://ir-dev.digital.flvc.org/flvc_ir_get_parent_organizations/<xsl:value-of select="$PID"/>/datastream/MODS</xsl:variable>
+      <xsl:variable name="orgresults" select="document($orgURL)"/>
+      <xsl:for-each select="$orgresults//result:organization">
+        <field name="mods_parent_organization_ms">
+        <xsl:value-of select="text()"/>
+        </field>
+        <field name="parent_organization_ms">
+        <xsl:value-of select="text()"/>
+        </field>
+      </xsl:for-each>
+    </xsl:if>
 
     <!-- additional processing to include type in field name -->
     <!-- DOI, ISSN, ISBN, and any other typed IDs -->
