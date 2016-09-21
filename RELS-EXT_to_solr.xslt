@@ -57,13 +57,24 @@
 	    </xsl:for-each>
 
             <xsl:for-each select="$content//rdf:Description/fedora:isMemberOfCollection[@rdf:resource]">
+                <field name="parent_collection_id_ms">
+                <xsl:value-of select="@rdf:resource"/>
+                </field>
+                <xsl:if test="contains(@rdf:resource,':root')">
+                  <field name="site_collection_id_ms">
+                  <xsl:value-of select="@rdf:resource"/>
+                  </field>
+                </xsl:if>
                 <xsl:variable name="walk_from_collection_pid">
                 <xsl:value-of select="@rdf:resource"/>
                 </xsl:variable>
-                <xsl:variable name="query">select+$object+from+%3C%23ri%3E+where+$subject+%3Cfedora-model:hasModel%3E+%3Cinfo:fedora/islandora:collectionCModel%3E+and+walk%28%3C<xsl:value-of select="$walk_from_collection_pid"/>%3E+%3Cfedora-rels-ext:isMemberOfCollection%3E+$object+and+$subject+%3Cfedora-rels-ext:isMemberOfCollection%3E+$object%29</xsl:variable>
-                <xsl:variable name="sparqlUrl">http://localhost:8080/fedora/risearch?type=tuples&amp;lang=itql&amp;limit=1000&amp;format=Sparql&amp;query=<xsl:value-of select="$query"/></xsl:variable>
+                <xsl:variable name="query">select+%3Fobject+from+%3C%23ri%3E+where+%7B%3Fobject+%3Cfedora-model:hasModel%3E+%3Cinfo:fedora/islandora:collectionCModel%3E+%2E+%3C<xsl:value-of select="$walk_from_collection_pid"/>%3E+%3Cfedora-rels-ext:isMemberOfCollection%3E%2B+%3Fobject+%2E+%7D</xsl:variable>
+                <xsl:variable name="sparqlUrl">http://localhost:8080/fedora/risearch?type=tuples&amp;lang=sparql&amp;limit=1000&amp;format=Sparql&amp;query=<xsl:value-of select="$query"/></xsl:variable>
                 <xsl:variable name="sparql" select="document($sparqlUrl)"/>
                 <xsl:for-each select="$sparql//result:object">
+                  <field name="parent_collection_id_ms">
+                  <xsl:value-of select="@uri"/>
+                  </field>
                   <xsl:if test="contains(@uri,':root')">
                     <field name="site_collection_id_ms">
                     <xsl:value-of select="@uri"/>
@@ -75,10 +86,13 @@
                 <xsl:variable name="walk_from_parent_object_pid">
                 <xsl:value-of select="@rdf:resource"/>
                 </xsl:variable>
-                <xsl:variable name="query2">select+$object+from+%3C%23ri%3E+where+$subject+%3Cfedora-model:hasModel%3E+%3Cinfo:fedora/islandora:collectionCModel%3E+and+walk%28%3C<xsl:value-of select="$walk_from_parent_object_pid"/>%3E+%3Cfedora-rels-ext:isMemberOfCollection%3E+$object+and+$subject+%3Cfedora-rels-ext:isMemberOfCollection%3E+$object%29</xsl:variable>
-                <xsl:variable name="sparqlUrl2">http://localhost:8080/fedora/risearch?type=tuples&amp;lang=itql&amp;limit=1000&amp;format=Sparql&amp;query=<xsl:value-of select="$query2"/></xsl:variable>
+                <xsl:variable name="query2">select+%3Fobject+from+%3C%23ri%3E+where+%7B%3Fobject+%3Cfedora-model:hasModel%3E+%3Cinfo:fedora/islandora:collectionCModel%3E+%2E+%3C<xsl:value-of select="$walk_from_parent_object_pid"/>%3E+%3Cfedora-rels-ext:isMemberOfCollection%3E%2B+%3Fobject+%2E+%7D</xsl:variable>
+                <xsl:variable name="sparqlUrl2">http://localhost:8080/fedora/risearch?type=tuples&amp;lang=sparql&amp;limit=1000&amp;format=Sparql&amp;query=<xsl:value-of select="$query2"/></xsl:variable>
                 <xsl:variable name="sparql2" select="document($sparqlUrl2)"/>
                 <xsl:for-each select="$sparql2//result:object">
+                  <field name="parent_collection_id_ms">
+                  <xsl:value-of select="@uri"/>
+                  </field>
                   <xsl:if test="contains(@uri,':root')">
                     <field name="site_collection_id_ms">
                     <xsl:value-of select="@uri"/>
@@ -111,8 +125,8 @@
             </xsl:if>
 
             <xsl:for-each select="($content//rdf:Description/fedora:isMemberOf[@rdf:resource])[1] | ($content//rdf:Description/islandora:isComponentOf[@rdf:resource])[1]">
-                <xsl:variable name="top_parent_query">select+$object+$collection+from+%3C%23ri%3E+where+$object+%3Cfedora-rels-ext:isMemberOfCollection%3E+$collection+and+walk%28%3C<xsl:value-of select="@rdf:resource"/>%3E+%3Cfedora-rels-ext:isMemberOf%3E+$object+and+$subject+%3Cfedora-rels-ext:isMemberOf%3E+$object%29</xsl:variable>
-                <xsl:variable name="top_parent_sparqlUrl">http://localhost:8080/fedora/risearch?type=tuples&amp;lang=itql&amp;limit=1000&amp;format=Sparql&amp;query=<xsl:value-of select="$top_parent_query"/></xsl:variable>
+                <xsl:variable name="top_parent_query">select+%3Fobject+%3Fcollection+from+%3C%23ri%3E+where+%7B%3Fobject+%3Cfedora-rels-ext:isMemberOfCollection%3E+%3Fcollection+%2E+%3C<xsl:value-of select="@rdf:resource"/>%3E+%3Cfedora-rels-ext:isMemberOf%3E%2B+%3Fobject+%2E+%7D</xsl:variable>
+                <xsl:variable name="top_parent_sparqlUrl">http://localhost:8080/fedora/risearch?type=tuples&amp;lang=sparql&amp;limit=1000&amp;format=Sparql&amp;query=<xsl:value-of select="$top_parent_query"/></xsl:variable>
                 <xsl:variable name="top_parent_sparql" select="document($top_parent_sparqlUrl)"/>
                 <xsl:for-each select="($top_parent_sparql//result:object)[1]">
 
@@ -140,10 +154,13 @@
                         </field>
                     </xsl:if>
 
-                    <xsl:variable name="query3">select+$object+from+%3C%23ri%3E+where+$subject+%3Cfedora-model:hasModel%3E+%3Cinfo:fedora/islandora:collectionCModel%3E+and+walk%28%3C<xsl:value-of select="@uri"/>%3E+%3Cfedora-rels-ext:isMemberOfCollection%3E+$object+and+$subject+%3Cfedora-rels-ext:isMemberOfCollection%3E+$object%29</xsl:variable>
-                    <xsl:variable name="sparqlUrl3">http://localhost:8080/fedora/risearch?type=tuples&amp;lang=itql&amp;limit=1000&amp;format=Sparql&amp;query=<xsl:value-of select="$query3"/></xsl:variable>
+                    <xsl:variable name="query3">select+%3Fobject+from+%3C%23ri%3E+where+%7B%3Fobject+%3Cfedora-model:hasModel%3E+%3Cinfo:fedora/islandora:collectionCModel%3E+%2E+%3C<xsl:value-of select="@uri"/>%3E+%3Cfedora-rels-ext:isMemberOfCollection%3E%2B+%3Fobject+%2E+%7D</xsl:variable>
+                    <xsl:variable name="sparqlUrl3">http://localhost:8080/fedora/risearch?type=tuples&amp;lang=sparql&amp;limit=1000&amp;format=Sparql&amp;query=<xsl:value-of select="$query3"/></xsl:variable>
                     <xsl:variable name="sparql3" select="document($sparqlUrl3)"/>
                     <xsl:for-each select="$sparql3//result:object">
+                      <field name="parent_collection_id_ms">
+                      <xsl:value-of select="@uri"/>
+                      </field>
                       <xsl:if test="contains(@uri,':root')">
                         <field name="site_collection_id_ms">
                         <xsl:value-of select="@uri"/>
