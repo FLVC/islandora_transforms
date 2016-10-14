@@ -44,12 +44,15 @@
           <xsl:with-param name="node" select="."/>
         </xsl:call-template>
       </xsl:variable>
-      <field>
-        <xsl:attribute name="name">
-          <xsl:value-of select="concat($prefix, $fieldNameWithTypes, $suffix)"/>
-        </xsl:attribute>
-        <xsl:value-of select="normalize-space(text())"/>
-      </field>
+
+      <xsl:if test="not($fieldNameWithTypes=$fieldName)">
+        <field>
+          <xsl:attribute name="name">
+            <xsl:value-of select="concat($prefix, $fieldNameWithTypes, $suffix)"/>
+          </xsl:attribute>
+          <xsl:value-of select="normalize-space(text())"/>
+        </field>
+      </xsl:if>
 
     </xsl:for-each>
     
