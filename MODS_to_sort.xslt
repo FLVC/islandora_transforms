@@ -325,7 +325,7 @@
     <xsl:variable name="site_prefix">
       <xsl:choose>
         <xsl:when test="$PID_namespace=islandora">
-          ir
+          <xsl:value-of select="ir"/>
         </xsl:when>
         <xsl:otherwise>
           <xsl:value-of select="$PID_namespace"/>
@@ -335,7 +335,7 @@
 
     <!-- if nameIdentifier exists in mods, index all parent organizations -->
     <xsl:if test="$modscontent/mods:name/mods:nameIdentifier">
-      <xsl:variable name="orgURL">http://ir-dev.digital.flvc.org/flvc_ir_get_parent_organizations/<xsl:value-of select="$PID"/>/datastream/MODS</xsl:variable>
+      <xsl:variable name="orgURL">http://<xsl:value-of select="$site_prefix"/>-test.digital.flvc.org/flvc_ir_get_parent_organizations/<xsl:value-of select="$PID"/>/datastream/MODS</xsl:variable>
       <xsl:variable name="orgresults" select="document($orgURL)"/>
       <xsl:for-each select="$orgresults//result:organization">
         <field name="mods_parent_organization_ms">

@@ -138,7 +138,7 @@
     <xsl:variable name="site_prefix">
       <xsl:choose>
         <xsl:when test="$PID_namespace=islandora">
-          ir
+          <xsl:value-of select="ir"/>
         </xsl:when>
         <xsl:otherwise>
           <xsl:value-of select="$PID_namespace"/>
@@ -148,7 +148,7 @@
 
     <!-- if organization exists in mads, index all parent organizations -->
     <xsl:if test="$content//mads:organization">
-      <xsl:variable name="orgsURL">http://ir-dev.digital.flvc.org/flvc_ir_get_parent_organizations/<xsl:value-of select="$PID"/>/datastream/MADS</xsl:variable>
+      <xsl:variable name="orgsURL">http://<xsl:value-of select="$site_prefix"/>-test.digital.flvc.org/flvc_ir_get_parent_organizations/<xsl:value-of select="$PID"/>/datastream/MADS</xsl:variable>
       <xsl:variable name="orgsresults" select="document($orgsURL)"/>
       <xsl:for-each select="$orgsresults//result:organization">
         <field name="MADS_parent_organization_ms">
@@ -162,7 +162,7 @@
 
     <!-- if parentOrg exists in mads, index all parent organizations -->
     <xsl:if test="$content//mads:related[@type = 'parentOrg']/mads:name[@type = 'corporate']/mads:namePart">
-      <xsl:variable name="orgsURL">http://ir-dev.digital.flvc.org/flvc_ir_get_parent_organizations/<xsl:value-of select="$PID"/>/datastream/MADS</xsl:variable>
+      <xsl:variable name="orgsURL">http://<xsl:value-of select="$site_prefix"/>-test.digital.flvc.org/flvc_ir_get_parent_organizations/<xsl:value-of select="$PID"/>/datastream/MADS</xsl:variable>
       <xsl:variable name="orgsresults" select="document($orgsURL)"/>
       <xsl:for-each select="$orgsresults//result:organization">
         <field name="MADS_parent_department_ms">
