@@ -324,15 +324,15 @@
     <xsl:variable name="PID_namespace" select="substring-before($PID, ':')"/>
     <xsl:variable name="site_prefix">
       <xsl:choose>
-        <xsl:when test="$PID_namespace=islandora">
-          <xsl:value-of select="ir"/>
+        <xsl:when test="$PID_namespace='islandora'">
+          <xsl:value-of select="'ir'"/>
         </xsl:when>
         <xsl:otherwise>
           <xsl:value-of select="$PID_namespace"/>
         </xsl:otherwise>
       </xsl:choose>
     </xsl:variable>
-
+    <field name="site_prefix"><xsl:value-of select="$site_prefix"/></field>
     <!-- if nameIdentifier exists in mods, index all parent organizations -->
     <xsl:if test="$modscontent/mods:name/mods:nameIdentifier">
       <xsl:variable name="orgURL">http://<xsl:value-of select="$site_prefix"/>-test.digital.flvc.org/flvc_ir_get_parent_organizations/<xsl:value-of select="$PID"/>/datastream/MODS</xsl:variable>
