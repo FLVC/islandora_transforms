@@ -135,6 +135,16 @@
     </xsl:for-each>
 
     <xsl:variable name="PID_namespace" select="substring-before($PID, ':')"/>
+    <xsl:variable name="site_prefix">
+      <xsl:choose>
+        <xsl:when test="$PID_namespace=islandora">
+          ir
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="$PID_namespace"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
 
     <!-- if organization exists in mads, index all parent organizations -->
     <xsl:if test="$content//mads:organization">
