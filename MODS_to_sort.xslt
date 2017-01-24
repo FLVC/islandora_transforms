@@ -361,15 +361,35 @@
       </xsl:if>
     </xsl:for-each>
 
-    <!-- additional processing to include type in field name -->
-    <!-- note with type compound -->
-    <xsl:for-each select="$modscontent/mods:note[@type='compound'][normalize-space(text())]">
-        <field>
-          <xsl:attribute name="name">
-            <xsl:value-of select="concat($prefix, local-name(), '_', @type, $suffix)"/>
-          </xsl:attribute>
-          <xsl:value-of select="text()"/>
+    <xsl:for-each select="$modscontent/mods:language">
+      <xsl:for-each select="mods:languageTerm[@type='text'][normalize-space(text())]">
+        <field name="mods_language_languageTerm_mapped_ms">
+        <xsl:value-of select="normalize-space(text())"/>
         </field>
+      </xsl:for-each>
+      <xsl:for-each select="mods:languageTerm[@type='code'][normalize-space(text())]">
+        <xsl:variable name="isoCode" select="translate(normalize-space(text()), 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz')" />
+        <xsl:variable name="isoName" select="document('assets/isolang.xml')/languages/lang[@code=$isoCode]" />
+        <xsl:if test="string-length($isoName) &gt; 0">
+          <xsl:choose>
+            <xsl:when test="contains($isoName, ';')">
+              <field name="mods_language_languageTerm_mapped_ms">
+              <xsl:value-of select="substring-before($isoName,';')"/>
+              </field>
+            </xsl:when>
+            <xsl:otherwise>
+              <field name="mods_language_languageTerm_mapped_ms">
+              <xsl:value-of select="$isoName"/>
+              </field>
+            </xsl:otherwise>
+          </xsl:choose>
+        </xsl:if>
+        <xsl:if test="not(string-length($isoName) &gt; 0)">
+          <field name="mods_language_languageTerm_mapped_ms">
+          <xsl:value-of select="normalize-space(text())"/>
+          </field>
+        </xsl:if>
+      </xsl:for-each>
     </xsl:for-each>
 
   </xsl:template>
