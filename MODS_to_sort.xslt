@@ -334,8 +334,8 @@
     </xsl:variable>
 
     <!-- if nameIdentifier exists in mods, index all parent organizations -->
-    <xsl:if test="$modscontent/mods:name/mods:nameIdentifier">
-      <xsl:variable name="orgURL">http://<xsl:value-of select="$site_prefix"/>-test.digital.flvc.org/flvc_ir_get_parent_organizations/<xsl:value-of select="$PID"/>/datastream/MODS</xsl:variable>
+    <xsl:for-each select="$modscontent/mods:name/mods:nameIdentifier">
+      <xsl:variable name="orgURL">http://<xsl:value-of select="$site_prefix"/>-test.digital.flvc.org/flvc_ir_get_parent_organizations_from_scholar/<xsl:value-of select="encoder:encode(text())"/></xsl:variable>
       <xsl:variable name="orgresults" select="document($orgURL)"/>
       <xsl:for-each select="$orgresults//result:organization">
         <field name="mods_parent_organization_ms">
@@ -345,7 +345,7 @@
         <xsl:value-of select="text()"/>
         </field>
       </xsl:for-each>
-    </xsl:if>
+    </xsl:for-each>
 
     <!-- additional processing to include type in field name -->
     <!-- DOI, ISSN, ISBN, and any other typed IDs -->
