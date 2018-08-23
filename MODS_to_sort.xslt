@@ -7,7 +7,39 @@
   xmlns:mods="http://www.loc.gov/mods/v3"
   xmlns:result="http://www.w3.org/2001/sw/DataAccess/rf1/result"
   xmlns:encoder="xalan://java.net.URLEncoder"
+  xmlns:internal="internal:internal"
      exclude-result-prefixes="mods">
+
+  <internal:rightsconfig>
+    <array type="rightspublic">
+      <Item>http://rightsstatements.org/vocab/NoC-US/1.0/</Item>
+      <Item>http://rightsstatements.org/vocab/NKC/1.0/</Item>
+    </array>
+    <array type="rightsrestricted">
+      <Item>http://rightsstatements.org/vocab/InC/1.0/</Item>
+      <Item>http://rightsstatements.org/vocab/InC-OW-EU/1.0/</Item>
+      <Item>http://rightsstatements.org/vocab/InC-EDU/1.0/</Item>
+      <Item>http://rightsstatements.org/vocab/InC-NC/1.0/</Item>
+      <Item>http://rightsstatements.org/vocab/InC-RUU/1.0/</Item>
+      <Item>http://rightsstatements.org/vocab/NoC-CR/1.0/</Item>
+      <Item>http://rightsstatements.org/vocab/NoC-NC/1.0/</Item>
+      <Item>http://rightsstatements.org/vocab/NoC-OKLR/1.0/</Item>
+    </array>
+    <array type="commonspublic">
+      <Item>http://creativecommons.org/publicdomain/mark/1.0/</Item>
+      <Item>http://creativecommons.org/publicdomain/zero/1.0/</Item>
+    </array>
+    <array type="commonsrestricted">
+      <Item>http://creativecommons.org/licenses/by/4.0/</Item>
+      <Item>http://creativecommons.org/licenses/by-sa/4.0/</Item>
+      <Item>http://creativecommons.org/licenses/by-nd/4.0/</Item>
+      <Item>http://creativecommons.org/licenses/by-nc/4.0/</Item>
+      <Item>http://creativecommons.org/licenses/by-nc-sa/4.0/</Item>
+      <Item>http://creativecommons.org/licenses/by-nc-nd/4.0/</Item>
+    </array>
+  </internal:rightsconfig>
+
+  <xsl:variable name="rights" select="document('')/*/internal:rightsconfig" />
 
   <xsl:template match="foxml:datastream[@ID='MODS']/foxml:datastreamVersion[last()]" name="index_MODS_sort" mode="sort">
     <xsl:param name="content"/>
@@ -406,6 +438,40 @@
           </field>
         </xsl:if>
       </xsl:for-each>
+    </xsl:for-each>
+
+    <xsl:for-each select="$modscontent/mods:accessCondition[@type='use and reproduction' and @displayLabel='RightsStatements.org'][normalize-space(text())]">
+        <field name="mods_accessCondition_use_and_reproduction_rightsstatements_org_ms">
+        <xsl:if test="not(current()/@xlink:href)">
+            <xsl:value-of select="normalize-space(text())"/>
+        </xsl:if>
+        <xsl:if test="current()/@xlink:href">
+            <xsl:value-of select="current()/@xlink:href"/>
+        </xsl:if>
+        </field>
+        <xsl:if test="$rights/array[@type='rightspublic']/Item[./text() = normalize-space(current()/text())] or $rights/array[@type='rightspublic']/Item[./text() = current()/@xlink:href]">
+            <field name="mods_accessCondition_use_and_reproduction_reuse_or_not_ms">Public domain</field>
+        </xsl:if>
+        <xsl:if test="$rights/array[@type='rightsrestricted']/Item[./text() = normalize-space(current()/text())] or $rights/array[@type='rightsrestricted']/Item[./text() = current()/@xlink:href]">
+            <field name="mods_accessCondition_use_and_reproduction_reuse_or_not_ms">Restrictions on use</field>
+        </xsl:if>
+    </xsl:for-each>
+
+    <xsl:for-each select="$modscontent/mods:accessCondition[@type='use and reproduction' and @displayLabel='Creative Commons'][normalize-space(text())]">
+        <field name="mods_accessCondition_use_and_reproduction_creative_commons_ms">
+        <xsl:if test="not(current()/@xlink:href)">
+            <xsl:value-of select="normalize-space(text())"/>
+        </xsl:if>
+        <xsl:if test="current()/@xlink:href">
+            <xsl:value-of select="current()/@xlink:href"/>
+        </xsl:if>
+        </field>
+        <xsl:if test="$rights/array[@type='commonspublic']/Item[./text() = normalize-space(current()/text())] or $rights/array[@type='commonspublic']/Item[./text() = current()/@xlink:href]">
+            <field name="mods_accessCondition_use_and_reproduction_reuse_or_not_ms">Public domain</field>
+        </xsl:if>
+        <xsl:if test="$rights/array[@type='commonsrestricted']/Item[./text() = normalize-space(current()/text())] or $rights/array[@type='commonsrestricted']/Item[./text() = current()/@xlink:href]">
+            <field name="mods_accessCondition_use_and_reproduction_reuse_or_not_ms">Restrictions on use</field>
+        </xsl:if>
     </xsl:for-each>
 
   </xsl:template>
