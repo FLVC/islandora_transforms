@@ -15,23 +15,27 @@
       <Item>http://rightsstatements.org/vocab/NoC-US/1.0/</Item>
       <Item>http://rightsstatements.org/vocab/NKC/1.0/</Item>
     </array>
-    <array type="rightsrestricted">
-      <Item>http://rightsstatements.org/vocab/InC/1.0/</Item>
-      <Item>http://rightsstatements.org/vocab/InC-OW-EU/1.0/</Item>
+    <array type="rightslimited">
       <Item>http://rightsstatements.org/vocab/InC-EDU/1.0/</Item>
       <Item>http://rightsstatements.org/vocab/InC-NC/1.0/</Item>
-      <Item>http://rightsstatements.org/vocab/InC-RUU/1.0/</Item>
       <Item>http://rightsstatements.org/vocab/NoC-CR/1.0/</Item>
       <Item>http://rightsstatements.org/vocab/NoC-NC/1.0/</Item>
       <Item>http://rightsstatements.org/vocab/NoC-OKLR/1.0/</Item>
     </array>
+    <array type="rightsrestricted">
+      <Item>http://rightsstatements.org/vocab/InC/1.0/</Item>
+      <Item>http://rightsstatements.org/vocab/InC-OW-EU/1.0/</Item>
+      <Item>http://rightsstatements.org/vocab/InC-RUU/1.0/</Item>
+      <Item>http://rightsstatements.org/vocab/CNE/1.0/</Item>
+      <Item>http://rightsstatements.org/vocab/UND/1.0/</Item>
+    </array>
     <array type="commonspublic">
       <Item>http://creativecommons.org/publicdomain/mark/1.0/</Item>
       <Item>http://creativecommons.org/publicdomain/zero/1.0/</Item>
-    </array>
-    <array type="commonsrestricted">
       <Item>http://creativecommons.org/licenses/by/4.0/</Item>
       <Item>http://creativecommons.org/licenses/by-sa/4.0/</Item>
+    </array>
+    <array type="commonslimited">
       <Item>http://creativecommons.org/licenses/by-nd/4.0/</Item>
       <Item>http://creativecommons.org/licenses/by-nc/4.0/</Item>
       <Item>http://creativecommons.org/licenses/by-nc-sa/4.0/</Item>
@@ -367,7 +371,7 @@
 
     <!-- if nameIdentifier exists in mods, index all parent organizations -->
     <xsl:for-each select="$modscontent/mods:name/mods:nameIdentifier">
-      <xsl:variable name="orgURL">http://<xsl:value-of select="$site_prefix"/>-test.digital.flvc.org/flvc_ir_get_parent_organizations_from_scholar/<xsl:value-of select="encoder:encode(text())"/></xsl:variable>
+      <xsl:variable name="orgURL">http://<xsl:value-of select="$site_prefix"/>.digital.flvc.org/flvc_ir_get_parent_organizations_from_scholar/<xsl:value-of select="encoder:encode(text())"/></xsl:variable>
       <xsl:variable name="orgresults" select="document($orgURL)"/>
       <xsl:for-each select="$orgresults//result:organization">
         <field name="mods_parent_organization_ms">
@@ -381,7 +385,7 @@
 
     <!-- if affiliation exists in mods, index all parent organizations -->
     <xsl:for-each select="$modscontent/mods:name/mods:affiliation">
-      <xsl:variable name="orgURL">http://<xsl:value-of select="$site_prefix"/>-test.digital.flvc.org/flvc_ir_get_parent_organizations_from_org/<xsl:value-of select="encoder:encode(text())"/></xsl:variable>
+      <xsl:variable name="orgURL">http://<xsl:value-of select="$site_prefix"/>.digital.flvc.org/flvc_ir_get_parent_organizations_from_org/<xsl:value-of select="encoder:encode(text())"/></xsl:variable>
       <xsl:variable name="orgresults" select="document($orgURL)"/>
       <xsl:if test="count($orgresults//result:organization) &gt; 1">
       <xsl:for-each select="$orgresults//result:organization">
@@ -450,10 +454,13 @@
         </xsl:if>
         </field>
         <xsl:if test="$rights/array[@type='rightspublic']/Item[./text() = normalize-space(current()/text())] or $rights/array[@type='rightspublic']/Item[./text() = current()/@xlink:href]">
-            <field name="mods_accessCondition_use_and_reproduction_reuse_or_not_ms">Public domain</field>
+            <field name="mods_accessCondition_use_and_reproduction_reuse_or_not_ms">flvc_rights_free_reuse</field>
+        </xsl:if>
+        <xsl:if test="$rights/array[@type='rightslimited']/Item[./text() = normalize-space(current()/text())] or $rights/array[@type='rightslimited']/Item[./text() = current()/@xlink:href]">
+            <field name="mods_accessCondition_use_and_reproduction_reuse_or_not_ms">flvc_rights_limited_reuse</field>
         </xsl:if>
         <xsl:if test="$rights/array[@type='rightsrestricted']/Item[./text() = normalize-space(current()/text())] or $rights/array[@type='rightsrestricted']/Item[./text() = current()/@xlink:href]">
-            <field name="mods_accessCondition_use_and_reproduction_reuse_or_not_ms">Restrictions on use</field>
+            <field name="mods_accessCondition_use_and_reproduction_reuse_or_not_ms">flvc_rights_no_reuse</field>
         </xsl:if>
     </xsl:for-each>
 
@@ -467,10 +474,10 @@
         </xsl:if>
         </field>
         <xsl:if test="$rights/array[@type='commonspublic']/Item[./text() = normalize-space(current()/text())] or $rights/array[@type='commonspublic']/Item[./text() = current()/@xlink:href]">
-            <field name="mods_accessCondition_use_and_reproduction_reuse_or_not_ms">Public domain</field>
+            <field name="mods_accessCondition_use_and_reproduction_reuse_or_not_ms">flvc_rights_free_reuse</field>
         </xsl:if>
-        <xsl:if test="$rights/array[@type='commonsrestricted']/Item[./text() = normalize-space(current()/text())] or $rights/array[@type='commonsrestricted']/Item[./text() = current()/@xlink:href]">
-            <field name="mods_accessCondition_use_and_reproduction_reuse_or_not_ms">Restrictions on use</field>
+        <xsl:if test="$rights/array[@type='commonslimited']/Item[./text() = normalize-space(current()/text())] or $rights/array[@type='commonslimited']/Item[./text() = current()/@xlink:href]">
+            <field name="mods_accessCondition_use_and_reproduction_reuse_or_not_ms">flvc_rights_limited_reuse</field>
         </xsl:if>
     </xsl:for-each>
 
