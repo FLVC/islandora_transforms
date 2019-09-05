@@ -444,7 +444,7 @@
       </xsl:for-each>
     </xsl:for-each>
 
-    <xsl:for-each select="$modscontent/mods:accessCondition[@type='use and reproduction' and @displayLabel='RightsStatements.org'][normalize-space(text())]">
+    <xsl:for-each select="$modscontent/mods:accessCondition[@type='use and reproduction' and (@displayLabel='RightsStatements.org' or (@xlink:href and starts-with(@xlink:href, 'http://rightsstatements.org')))][normalize-space(text())]">
         <field name="mods_accessCondition_use_and_reproduction_rightsstatements_org_ms">
         <xsl:if test="not(current()/@xlink:href)">
             <xsl:value-of select="normalize-space(text())"/>
@@ -464,7 +464,7 @@
         </xsl:if>
     </xsl:for-each>
 
-    <xsl:for-each select="$modscontent/mods:accessCondition[@type='use and reproduction' and @displayLabel='Creative Commons'][normalize-space(text())]">
+    <xsl:for-each select="$modscontent/mods:accessCondition[@type='use and reproduction' and (@displayLabel='Creative Commons' or (@xlink:href and starts-with(@xlink:href, 'http://creativecommons.org')))][normalize-space(text())]">
         <field name="mods_accessCondition_use_and_reproduction_creative_commons_ms">
         <xsl:if test="not(current()/@xlink:href)">
             <xsl:value-of select="normalize-space(text())"/>
